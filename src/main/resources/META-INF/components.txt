@@ -1,0 +1,2 @@
+org.xwiki.contrib.validation.uuidpages.UUIDEntityNameValidation
+
