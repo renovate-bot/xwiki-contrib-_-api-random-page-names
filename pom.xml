@@ -29,19 +29,19 @@
   </parent>
   <groupId>org.xwiki.contrib</groupId>
   <artifactId>api-random-page-names</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
   <name>Random Page Naming Strategy - API</name>
   <description>Generate random unique page names by using UUIDs</description>
   <scm>
     <connection>scm:git:git://github.com/xwiki-contrib/api-random-page-names.git</connection>
     <developerConnection>scm:git:git@github.com:xwiki-contrib/api-random-page-names.git</developerConnection>
     <url>https://github.com/xwiki-contrib/api-random-page-names/tree/master</url>
-    <tag>HEAD</tag>
+    <tag>api-random-page-names-1.0</tag>
   </scm>
   <developers>
     <developer>
       <id>crobbenhaar</id>
-      <name></name>
+      <name />
     </developer>
     <developer>
       <id>xwikidev</id>
