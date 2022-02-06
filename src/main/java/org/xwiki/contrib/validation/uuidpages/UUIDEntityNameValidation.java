@@ -52,6 +52,8 @@ import com.fasterxml.uuid.NoArgGenerator;
 public class UUIDEntityNameValidation extends AbstractEntityNameValidation implements Initializable
 {
     protected static final String COMPONENT_NAME = "UUIDEntityNameValidation";
+    private static final String UUID_CONFIG_NAME = "org.xwiki.contrib.validation.uuidpages.UUIDGenerator";
+    private static final String UUID_CONFIG_RANDOM_VALUE = "random";
     private static final Pattern VALIDATION_PATTERN = Pattern
         .compile("^\\p{XDigit}{8}-\\p{XDigit}{4}-\\p{XDigit}{4}-\\p{XDigit}{4}-\\p{XDigit}{12}$");
 
@@ -75,7 +77,10 @@ public class UUIDEntityNameValidation extends AbstractEntityNameValidation imple
      */
     public void initialize()
     {
-        uuidGenerator = Generators.timeBasedGenerator(EthernetAddress.fromInterface());
+        String uuidConfig = config.getProperty(UUID_CONFIG_NAME);
+        uuidGenerator = (UUID_CONFIG_RANDOM_VALUE.equals(uuidConfig))
+            ? Generators.randomBasedGenerator()
+            : Generators.timeBasedGenerator(EthernetAddress.fromInterface());
         EntityReference defaultPage = defaultEntities.getDefaultReference(EntityType.DOCUMENT);
         defaultPageName = (defaultPage != null) ? defaultPage.getName() : "WebHome";
     }
