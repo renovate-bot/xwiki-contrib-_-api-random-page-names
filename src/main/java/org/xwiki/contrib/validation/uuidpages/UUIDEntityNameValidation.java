@@ -30,6 +30,9 @@ import org.slf4j.Logger;
 import org.xwiki.component.annotation.Component;
 import org.xwiki.component.phase.Initializable;
 import org.xwiki.configuration.ConfigurationSource;
+import org.xwiki.model.EntityType;
+import org.xwiki.model.reference.EntityReference;
+import org.xwiki.model.reference.EntityReferenceProvider;
 import org.xwiki.model.validation.AbstractEntityNameValidation;
 
 import com.fasterxml.uuid.EthernetAddress;
@@ -56,10 +59,16 @@ public class UUIDEntityNameValidation extends AbstractEntityNameValidation imple
     private Logger logger;
 
     @Inject
+    @Named("default")
+    private EntityReferenceProvider defaultEntities;
+
+    @Inject
     @Named("xwikiproperties")
     private ConfigurationSource config;
     
     private NoArgGenerator uuidGenerator;
+
+    private String defaultPageName;
 
     /**
      * Initialize with a default generator using the first MAC address found.
@@ -67,6 +76,8 @@ public class UUIDEntityNameValidation extends AbstractEntityNameValidation imple
     public void initialize()
     {
         uuidGenerator = Generators.timeBasedGenerator(EthernetAddress.fromInterface());
+        EntityReference defaultPage = defaultEntities.getDefaultReference(EntityType.DOCUMENT);
+        defaultPageName = (defaultPage != null) ? defaultPage.getName() : "WebHome";
     }
 
     @Override
@@ -83,7 +94,43 @@ public class UUIDEntityNameValidation extends AbstractEntityNameValidation imple
     @Override
     public boolean isValid(String name)
     {
-        return VALIDATION_PATTERN.matcher(name).matches();
+        boolean valid = (name == null) || VALIDATION_PATTERN.matcher(name).matches();
+        logger.trace("is name [{}] valid? [{}]", name, valid);
+        return valid;
+    }
+
+    /**
+     * Check is the page name part of an entity is valid.
+     * Unlike the base class it only checks the current page name, not the complete path.
+     * @param entityReference the reference to be tested
+     * @return true if the page name is a valid (well-formed) UUID
+     */
+    @Override
+    public boolean isValid(EntityReference entityReference)
+    {
+        if (entityReference == null) {
+            return true;
+        }
+
+        boolean result = true;
+        switch (entityReference.getType()) {
+            case DOCUMENT:
+                String name = entityReference.getName();
+                if (defaultPageName.equals(name)) {
+                    EntityReference parent = entityReference.getParent();
+                    if (parent != null) {
+                        name = parent.getName();
+                    }
+                }
+                result = isValid(name);
+                break;
+            default:
+                // nothing to do
+                break;
+        }
+
+        logger.trace("entity [{}] valid? [{}]", entityReference, result);
+        return result;
     }
 
     /**

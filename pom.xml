@@ -50,7 +50,7 @@
   </developers>
   <properties>
     <!-- Test coverage -->
-    <xwiki.jacoco.instructionRatio>1.0</xwiki.jacoco.instructionRatio>
+    <xwiki.jacoco.instructionRatio>0.9</xwiki.jacoco.instructionRatio>
     <!-- Name to display by the Extension Manager -->
     <xwiki.extension.name>Random Page Naming Strategy</xwiki.extension.name>
     <xwiki.issueManagement.jira.id>RPN</xwiki.issueManagement.jira.id>
