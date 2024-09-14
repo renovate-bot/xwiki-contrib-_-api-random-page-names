@@ -43,10 +43,6 @@
       <id>crobbenhaar</id>
       <name>Clemens Robbenhaar</name>
     </developer>
-    <developer>
-      <id>xwikidev</id>
-      <name>XWiki Development Team</name>
-    </developer>
   </developers>
   <properties>
     <!-- Test coverage -->
